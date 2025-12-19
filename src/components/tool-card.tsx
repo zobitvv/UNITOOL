@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Star } from 'lucide-react';
 import type { Tool } from '@/lib/tools';
 import { cn } from '@/lib/utils';
@@ -35,10 +36,8 @@ export function ToolCard({ tool, isHighlighted, isFavorite, onToggleFavorite }: 
   };
 
   return (
-    <a
-      href={tool.href}
-      target="_blank"
-      rel="noopener noreferrer"
+    <Link
+      href={tool.internalHref}
       className="block h-full group"
     >
       <Card
@@ -77,6 +76,6 @@ export function ToolCard({ tool, isHighlighted, isFavorite, onToggleFavorite }: 
             </div>
         </CardContent>
       </Card>
-    </a>
+    </Link>
   );
 }

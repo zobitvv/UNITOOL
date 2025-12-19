@@ -42,13 +42,24 @@ import {
 
 export type Tool = {
   title: string;
+  slug: string;
   description: string;
   href: string;
+  internalHref: string;
   category: 'AI Write' | 'Image Tools' | 'Pdf Tools' | 'Video Tools' | 'Converter Tools' | 'Web Tools' | 'Other Tools';
   icon: React.ElementType;
 };
 
-export const tools: Tool[] = [
+function slugify(text: string) {
+  return text.toString().toLowerCase()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start of text
+    .replace(/-+$/, '');            // Trim - from end of text
+}
+
+const rawTools: Omit<Tool, 'slug' | 'internalHref'>[] = [
   { title: "Essay Writer", description: "Easily create an essay with AI", href: "https://tinywow.com/write/essay-writer", category: "AI Write", icon: PenLine },
   { title: "Content Improver", description: "Improve your content", href: "https://tinywow.com/write/content-improver", category: "AI Write", icon: Wand2 },
   { title: "Paragraph Writer", description: "Paragraph Writer", href: "https://tinywow.com/write/paragraph-writer", category: "AI Write", icon: FileText },
@@ -211,3 +222,13 @@ export const tools: Tool[] = [
   { title: "AVI to MP4", description: "Convert AVI to MP4", href: "https://tinywow.com/video/avi-to-mp4", category: "Video Tools", icon: FileVideo },
   { title: "Flip Image", description: "Flip Image", href: "https://tinywow.com/image/flip", category: "Image Tools", icon: FlipHorizontal },
 ];
+
+
+export const tools: Tool[] = rawTools.map(tool => {
+  const slug = slugify(tool.title);
+  return {
+    ...tool,
+    slug,
+    internalHref: `/tool/${slug}`,
+  };
+});
