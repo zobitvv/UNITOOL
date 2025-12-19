@@ -37,9 +37,7 @@ export function ToolCard({ tool, isHighlighted, isFavorite, onToggleFavorite }: 
 
   return (
     <Link
-      href={tool.href}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={tool.internalHref}
       className="block h-full group"
     >
       <Card
