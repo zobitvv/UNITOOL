@@ -3,6 +3,7 @@
 import React, { use } from 'react';
 import { tools, ToolCategory } from '@/lib/tools';
 import { ToolCard } from '@/components/tool-card';
+import { ThemeToggle } from '@/components/theme-toggle';
 import { notFound } from 'next/navigation';
 
 export default function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
@@ -29,10 +30,11 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <main className="flex-1 container max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-8 border-b pb-4">
-          <h1 className="text-2xl font-bold tracking-tight text-center">
+        <div className="mb-8 border-b pb-4 flex items-center justify-between">
+          <h1 className="text-2xl font-bold tracking-tight">
             {categoryName}
           </h1>
+          <ThemeToggle />
         </div>
 
         {filteredTools.length > 0 ? (

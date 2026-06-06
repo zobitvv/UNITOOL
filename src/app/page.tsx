@@ -3,6 +3,7 @@
 import React from 'react';
 import { tools, ToolCategory } from '@/lib/tools';
 import { ToolCard } from '@/components/tool-card';
+import { ThemeToggle } from '@/components/theme-toggle';
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 
@@ -22,19 +23,24 @@ export default function Home() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
       <main className="flex-1 container max-w-4xl mx-auto px-4 py-8">
-        <div className="mb-10">
-          <h1 className="text-3xl font-extrabold tracking-tight text-center">
-            Toolbox AI
-          </h1>
-          <p className="text-center text-muted-foreground text-sm mt-2">
-            Professional tools, simplified for you.
-          </p>
+        <div className="mb-10 flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="text-3xl font-extrabold tracking-tight text-center">
+              Toolbox AI
+            </h1>
+            <p className="text-center text-muted-foreground text-sm mt-2">
+              Professional tools, simplified for you.
+            </p>
+          </div>
+          <div className="absolute right-4 top-8 md:right-8">
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="space-y-12">
           {categories.map((category) => {
             const categoryTools = tools.filter((t) => t.category === category);
-            // Most tools at the bottom, best ones on top by natural array order in rawTools
+            // Show priority tools first, then the rest (up to 10 for preview)
             const previewTools = categoryTools.slice(0, 10);
             
             return (
