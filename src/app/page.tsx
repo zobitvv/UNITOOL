@@ -40,7 +40,7 @@ export default function Home() {
         <div className="space-y-12">
           {categories.map((category) => {
             const categoryTools = tools.filter((t) => t.category === category);
-            // Show priority tools first, then the rest (up to 10 for preview)
+            // On home page, show up to 10 tools per category
             const previewTools = categoryTools.slice(0, 10);
             
             return (
