@@ -1,37 +1,40 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import type { Tool } from '@/lib/tools';
 import { cn } from '@/lib/utils';
-import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardTitle } from '@/components/ui/card';
 
 interface ToolCardProps {
   tool: Tool;
-  isHighlighted?: boolean;
 }
 
-export function ToolCard({ tool, isHighlighted }: ToolCardProps) {
+export function ToolCard({ tool }: ToolCardProps) {
   const Icon = tool.icon;
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Open in same window/tab as requested
+    window.location.href = tool.href;
+  };
+
   return (
-    <Link
-      href={tool.href}
-      className="block group"
+    <div
+      onClick={handleClick}
+      className="block cursor-pointer active:scale-95 transition-transform"
     >
       <Card
         className={cn(
-          'flex flex-row items-center p-3 gap-3 transition-all duration-200 hover:bg-accent active:scale-95 border-none shadow-none bg-background/50',
-          isHighlighted && 'bg-primary/5 border border-primary/20'
+          'flex flex-col items-center justify-center p-4 gap-2 transition-all duration-200 hover:bg-accent border shadow-none bg-background text-center h-full min-h-[110px]'
         )}
       >
         <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10 flex-shrink-0 text-primary">
           <Icon className="h-5 w-5" />
         </div>
-        <CardTitle className="text-sm font-medium leading-tight group-hover:text-primary transition-colors flex-grow">
+        <CardTitle className="text-[11px] font-semibold leading-tight group-hover:text-primary transition-colors">
           {tool.title}
         </CardTitle>
       </Card>
-    </Link>
+    </div>
   );
 }

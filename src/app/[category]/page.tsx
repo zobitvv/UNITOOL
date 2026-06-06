@@ -28,18 +28,18 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <main className="flex-1 container max-w-2xl mx-auto px-4 py-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold tracking-tight">
+      <main className="flex-1 container max-w-4xl mx-auto px-4 py-8">
+        <div className="mb-8 border-b pb-4">
+          <h1 className="text-2xl font-bold tracking-tight text-center">
             {categoryName}
           </h1>
         </div>
 
         {filteredTools.length > 0 ? (
-          <div className="grid grid-cols-1 gap-1">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
             {filteredTools.map((tool) => (
               <ToolCard
-                key={`${tool.category}-${tool.slug}`}
+                key={`${tool.category}-${tool.slug}-${tool.title}`}
                 tool={tool}
               />
             ))}
@@ -51,10 +51,10 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
         )}
       </main>
       
-      <footer className="py-6 border-t bg-muted/20">
+      <footer className="py-6 border-t bg-muted/20 mt-auto">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
-            Toolbox AI
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+            TOOLBOX AI
           </p>
         </div>
       </footer>

@@ -21,38 +21,41 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <main className="flex-1 container max-w-2xl mx-auto px-4 py-6">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight mb-1">
+      <main className="flex-1 container max-w-4xl mx-auto px-4 py-8">
+        <div className="mb-10">
+          <h1 className="text-3xl font-extrabold tracking-tight text-center">
             Toolbox AI
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Fast access to TinyWow tools.
+          <p className="text-center text-muted-foreground text-sm mt-2">
+            Professional tools, simplified for you.
           </p>
         </div>
 
-        <div className="space-y-10">
+        <div className="space-y-12">
           {categories.map((category) => {
-            const categoryTools = tools.filter((t) => t.category === category).slice(0, 8);
+            const categoryTools = tools.filter((t) => t.category === category);
+            // Most tools at the bottom, best ones on top by natural array order in rawTools
+            const previewTools = categoryTools.slice(0, 10);
+            
             return (
               <section key={category} className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-bold">
+                <div className="flex items-center justify-between border-b border-muted-foreground/10 pb-2">
+                  <h2 className="text-lg font-bold text-foreground/90">
                     {category}
                   </h2>
                   <Link 
                     href={`/${categoryPaths[category]}`}
-                    className="text-xs font-medium text-primary hover:underline flex items-center"
+                    className="text-[10px] font-bold text-primary flex items-center bg-primary/5 px-2 py-1 rounded border border-primary/10 hover:bg-primary/10 transition-colors"
                   >
-                    All
+                    VIEW ALL
                     <ChevronRight className="h-3 w-3 ml-0.5" />
                   </Link>
                 </div>
                 
-                <div className="grid grid-cols-1 gap-1">
-                  {categoryTools.map((tool) => (
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                  {previewTools.map((tool) => (
                     <ToolCard
-                      key={`${tool.category}-${tool.slug}`}
+                      key={`${tool.category}-${tool.slug}-${tool.title}`}
                       tool={tool}
                     />
                   ))}
@@ -63,10 +66,10 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="py-8 border-t mt-12 bg-muted/20">
+      <footer className="py-10 border-t mt-12 bg-muted/20">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
-            Powered by TinyWow
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+            FAST AI ACCESS
           </p>
         </div>
       </footer>
