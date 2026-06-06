@@ -55,7 +55,7 @@ export default function CategoryPage({ params }: { params: Promise<{ category: s
       
       <footer className="py-6 border-t bg-muted/20 mt-auto">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+          <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">
             TOOLBOX AI
           </p>
         </div>

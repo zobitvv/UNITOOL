@@ -51,7 +51,7 @@ export default function Home() {
                   </h2>
                   <Link 
                     href={`/${categoryPaths[category]}`}
-                    className="text-[10px] font-bold text-primary flex items-center bg-primary/5 px-2 py-1 rounded border border-primary/10 hover:bg-primary/10 transition-colors"
+                    className="text-xs font-bold text-primary flex items-center bg-primary/5 px-3 py-1.5 rounded border border-primary/10 hover:bg-primary/10 transition-colors"
                   >
                     VIEW ALL
                     <ChevronRight className="h-3 w-3 ml-0.5" />
@@ -74,7 +74,7 @@ export default function Home() {
 
       <footer className="py-10 border-t mt-12 bg-muted/20">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+          <p className="text-xs text-muted-foreground uppercase tracking-widest font-bold">
             FAST AI ACCESS
           </p>
         </div>

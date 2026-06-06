@@ -25,13 +25,13 @@ export function ToolCard({ tool }: ToolCardProps) {
     >
       <Card
         className={cn(
-          'flex flex-col items-center justify-center p-3 gap-2 transition-all duration-200 hover:bg-accent border shadow-none bg-background text-center h-full min-h-[90px]'
+          'flex flex-col items-center justify-center p-3 gap-2 transition-all duration-200 hover:bg-accent border shadow-none bg-background text-center h-full min-h-[100px]'
         )}
       >
-        <div className="flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 flex-shrink-0 text-primary">
-          <Icon className="h-4 w-4" />
+        <div className="flex items-center justify-center h-9 w-9 rounded-full bg-primary/10 flex-shrink-0 text-primary">
+          <Icon className="h-4.5 w-4.5" />
         </div>
-        <CardTitle className="text-[10px] font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2 px-1">
+        <CardTitle className="text-xs font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2 px-1">
           {tool.title}
         </CardTitle>
       </Card>
