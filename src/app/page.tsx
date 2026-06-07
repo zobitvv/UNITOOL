@@ -43,6 +43,8 @@ export default function Home() {
             // On home page, show up to 10 tools per category
             const previewTools = categoryTools.slice(0, 10);
             
+            if (categoryTools.length === 0) return null;
+
             return (
               <section key={category} className="space-y-4">
                 <div className="flex items-center justify-between border-b border-muted-foreground/10 pb-2">

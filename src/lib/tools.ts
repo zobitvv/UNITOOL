@@ -133,8 +133,14 @@ const writeRanking = [
   "privacy-policy-generator", "business-plan-generator", "story-generator"
 ];
 
+const converterRanking = [
+  "excel-to-pdf", "csv-to-excel", "xml-to-json", "json-to-xml", "excel-to-csv", "azw3-to-epub", "azw3-to-mobi", 
+  "epub-to-azw3", "epub-to-mobi", "mobi-to-azw3", "mobi-to-epub", "csv-to-json", "csv-to-xml", "excel-to-xml",
+  "xml-to-csv", "xml-to-excel", "split-csv", "split-excel"
+];
+
 const otherRanking = [
-  "excel-to-pdf", "qr-code", "csv-to-excel", "to-jpg", "lorem-ipsum-generator", "zip", "unix-timestamp", "meme-maker"
+  "qr-code", "lorem-ipsum-generator", "zip", "unix-timestamp", "meme-maker"
 ];
 
 const rawTools: { slug: string; path: string; category: ToolCategory; icon: React.ElementType; description?: string }[] = [
@@ -280,11 +286,28 @@ const rawTools: { slug: string; path: string; category: ToolCategory; icon: Reac
   { slug: "business-plan-generator", path: "write", category: "AI Write", icon: Briefcase, description: "Create structured business plans with AI guidance." },
   { slug: "story-generator", path: "write", category: "AI Write", icon: Sparkles, description: "Generate creative stories and fictional plots with AI." },
 
+  // Converter Tools
+  { slug: "excel-to-pdf", path: "converter", category: "Converter Tools", icon: FileText, description: "Instantly convert Excel sheets to high-quality PDF files." },
+  { slug: "csv-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Transform CSV data into editable Excel spreadsheets." },
+  { slug: "xml-to-json", path: "converter", category: "Converter Tools", icon: FileCode, description: "Convert XML data structures into readable JSON format." },
+  { slug: "json-to-xml", path: "converter", category: "Converter Tools", icon: FileCode, description: "Turn JSON data objects into structured XML documents." },
+  { slug: "excel-to-csv", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Export Excel worksheets to standard CSV files." },
+  { slug: "azw3-to-epub", path: "converter", category: "Converter Tools", icon: Book, description: "Convert Kindle AZW3 e-books to EPUB format for general readers." },
+  { slug: "azw3-to-mobi", path: "converter", category: "Converter Tools", icon: Book, description: "Convert AZW3 books to the legacy MOBI kindle format." },
+  { slug: "epub-to-azw3", path: "converter", category: "Converter Tools", icon: Book, description: "Prepare your EPUB books for Kindle by converting to AZW3." },
+  { slug: "epub-to-mobi", path: "converter", category: "Converter Tools", icon: Book, description: "Convert EPUB e-books to MOBI format easily." },
+  { slug: "mobi-to-azw3", path: "converter", category: "Converter Tools", icon: Book, description: "Update your old MOBI books to modern Kindle AZW3 format." },
+  { slug: "mobi-to-epub", path: "converter", category: "Converter Tools", icon: Book, description: "Free your MOBI books by converting them to standard EPUB." },
+  { slug: "csv-to-json", path: "converter", category: "Converter Tools", icon: FileCode, description: "Map your CSV data rows to JSON objects." },
+  { slug: "csv-to-xml", path: "converter", category: "Converter Tools", icon: FileCode, description: "Convert tabular CSV data into nested XML trees." },
+  { slug: "excel-to-xml", path: "converter", category: "Converter Tools", icon: FileCode, description: "Turn complex Excel workbooks into XML data feeds." },
+  { slug: "xml-to-csv", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Flatten XML data into a simple CSV table format." },
+  { slug: "xml-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Convert XML reports into searchable Excel files." },
+  { slug: "split-csv", path: "converter", category: "Converter Tools", icon: Scissors, description: "Break large CSV files into smaller, manageable chunks." },
+  { slug: "split-excel", path: "converter", category: "Converter Tools", icon: Scissors, description: "Split multi-sheet Excel files or large workbooks." },
+
   // Other/Common
-  { slug: "excel-to-pdf", path: "converter", category: "Other Tools", icon: FileText, description: "Convert your Excel spreadsheets into high-quality PDF files." },
   { slug: "qr-code", path: "other", category: "Other Tools", icon: QrCode, description: "Generate custom QR codes for URLs, text, or wifi." },
-  { slug: "csv-to-excel", path: "converter", category: "Other Tools", icon: FileSpreadsheet, description: "Convert CSV data files into editable Excel spreadsheets." },
-  { slug: "to-jpg", path: "web", category: "Other Tools", icon: FileImage, description: "Convert webpages or other files into JPG images." },
   { slug: "lorem-ipsum-generator", path: "other", category: "Other Tools", icon: Type, description: "Generate placeholder 'Lorem Ipsum' text for your designs." },
   { slug: "zip", path: "other", category: "Other Tools", icon: Archive, description: "Compress multiple files into a single ZIP archive." },
   { slug: "unix-timestamp", path: "other", category: "Other Tools", icon: Timer, description: "Convert dates to Unix timestamps and vice versa." },
@@ -402,6 +425,9 @@ export const tools: Tool[] = rawTools
       rank = idx !== -1 ? idx : 999;
     } else if (t.category === "AI Write") {
       const idx = writeRanking.indexOf(t.slug);
+      rank = idx !== -1 ? idx : 999;
+    } else if (t.category === "Converter Tools") {
+      const idx = converterRanking.indexOf(t.slug);
       rank = idx !== -1 ? idx : 999;
     } else if (t.category === "Other Tools") {
       const idx = otherRanking.indexOf(t.slug);
