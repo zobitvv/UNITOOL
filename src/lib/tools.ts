@@ -102,6 +102,7 @@ function formatTitle(slug: string) {
     .join(' ');
 }
 
+// User's priority rankings
 const pdfRanking = [
   "merge", "compress", "to-word", "to-jpg", "split", "from-word", "remove-watermark", "edit", "extract-text", "to-png",
   "watermark", "rearrange", "from-jpg", "to-text", "sign", "unlock", "add-text", "add-images", "rotate", "extract-img",
@@ -137,26 +138,127 @@ const otherRanking = [
   "excel-to-pdf", "qr-code", "csv-to-excel", "to-jpg", "lorem-ipsum-generator", "zip", "unix-timestamp", "meme-maker"
 ];
 
+// All tools from sitemap
 const rawTools: { slug: string; path: string; category: ToolCategory; icon: React.ElementType; description?: string }[] = [
   // PDF
   ...pdfRanking.map(slug => ({ slug, path: "pdf", category: "Pdf Tools" as const, icon: getIconForSlug(slug) })),
+  { slug: "add-text", path: "pdf", category: "Pdf Tools", icon: Type },
+  { slug: "annotate", path: "pdf", category: "Pdf Tools", icon: PenLine },
+  { slug: "create", path: "pdf", category: "Pdf Tools", icon: FilePlusIcon },
+  { slug: "delete", path: "pdf", category: "Pdf Tools", icon: Scissors },
+  { slug: "from-eps", path: "pdf", category: "Pdf Tools", icon: FileImage },
+  { slug: "from-msg", path: "pdf", category: "Pdf Tools", icon: Mail },
+  { slug: "from-ppt", path: "pdf", category: "Pdf Tools", icon: FileVideo },
+  { slug: "from-webp", path: "pdf", category: "Pdf Tools", icon: FileImage },
+  { slug: "to-ppt", path: "pdf", category: "Pdf Tools", icon: FileVideo },
+
   // Image
   ...imageRanking.map(slug => ({ slug, path: "image", category: "Image Tools" as const, icon: getIconForSlug(slug) })),
+  { slug: "combine-maker", path: "image", category: "Image Tools", icon: Layout },
+  { slug: "crop-circle", path: "image", category: "Image Tools", icon: Scissors },
+  { slug: "eps-to-png", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "eps-to-svg", path: "image", category: "Image Tools", icon: FileCode },
+  { slug: "gif-to-apng", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "gif-to-avif", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "gif-to-png", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "heic-to-avif", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "heic-to-png", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "png-to-eps", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "psd-to-ai", path: "image", category: "Image Tools", icon: Sparkles },
+  { slug: "psd-to-pdf", path: "image", category: "Image Tools", icon: FileText },
+  { slug: "psd-to-svg", path: "image", category: "Image Tools", icon: FileCode },
+  { slug: "svg-to-png", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "text-image-generator", path: "image", category: "Image Tools", icon: Sparkles },
+  { slug: "tiff-to-svg", path: "image", category: "Image Tools", icon: FileCode },
+  { slug: "tiff-to-text", path: "image", category: "Image Tools", icon: FileText },
+  { slug: "vsd-to-docx", path: "image", category: "Image Tools", icon: FileText },
+  { slug: "vsd-to-jpg", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "vsd-to-pdf", path: "image", category: "Image Tools", icon: FileText },
+  { slug: "vsd-to-pptx", path: "image", category: "Image Tools", icon: Clapperboard },
+  { slug: "vsdx-to-docx", path: "image", category: "Image Tools", icon: FileText },
+  { slug: "vsdx-to-jpg", path: "image", category: "Image Tools", icon: FileImage },
+  { slug: "vsdx-to-pdf", path: "image", category: "Image Tools", icon: FileText },
+  { slug: "vsdx-to-pptx", path: "image", category: "Image Tools", icon: Clapperboard },
+  { slug: "webp-to-avif", path: "image", category: "Image Tools", icon: FileImage },
+
   // Video
   ...videoRanking.map(slug => ({ slug, path: "video", category: "Video Tools" as const, icon: getIconForSlug(slug) })),
+  { slug: "aac-to-flac", path: "video", category: "Video Tools", icon: FileAudio },
+  { slug: "aac-to-m4r", path: "video", category: "Video Tools", icon: Music },
+  { slug: "aac-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "aac-to-mp4", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "aac-to-wav", path: "video", category: "Video Tools", icon: FileAudio },
+  { slug: "avi-to-gif", path: "video", category: "Video Tools", icon: FileImage },
+  { slug: "avi-to-mkv", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "avi-to-mov", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "avi-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "avi-to-mp4", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "compress-avi", path: "video", category: "Video Tools", icon: Shrink },
+  { slug: "compress-mkv", path: "video", category: "Video Tools", icon: Shrink },
+  { slug: "compress-mov", path: "video", category: "Video Tools", icon: Shrink },
+  { slug: "from-fb", path: "video", category: "Video Tools", icon: Facebook },
+  { slug: "from-inst", path: "video", category: "Video Tools", icon: Instagram },
+  { slug: "gif-to-mov", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "gif-to-webm", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "m4a-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "m4a-to-mp4", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "m4a-to-wav", path: "video", category: "Video Tools", icon: FileAudio },
+  { slug: "mkv-to-avi", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mkv-to-gif", path: "video", category: "Video Tools", icon: FileImage },
+  { slug: "mkv-to-mov", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mkv-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "mkv-to-mp4", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mov-to-avi", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mov-to-gif", path: "video", category: "Video Tools", icon: FileImage },
+  { slug: "mov-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "mov-to-mp4", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mov-to-wav", path: "video", category: "Video Tools", icon: FileAudio },
+  { slug: "mp4-to-avi", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mp4-to-gif", path: "video", category: "Video Tools", icon: FileImage },
+  { slug: "mp4-to-mov", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "mp4-to-wav", path: "video", category: "Video Tools", icon: FileAudio },
+  { slug: "ogg-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "ogg-to-wav", path: "video", category: "Video Tools", icon: FileAudio },
+  { slug: "to-webp", path: "video", category: "Video Tools", icon: FileImage },
+  { slug: "webm-to-mov", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "webm-to-mp3", path: "video", category: "Video Tools", icon: Music },
+  { slug: "webm-to-mp4", path: "video", category: "Video Tools", icon: FileVideo },
+  { slug: "youtube-transcript", path: "video", category: "Video Tools", icon: FileText },
+
   // Write
   ...writeRanking.map(slug => ({ slug, path: "write", category: "AI Write" as const, icon: getIconForSlug(slug) })),
-  // Other / Misc from ranking
-  { slug: "excel-to-pdf", path: "converter", category: "Converter Tools", icon: FileText },
-  { slug: "qr-code", path: "other", category: "Other Tools", icon: QrCode },
-  { slug: "csv-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet },
-  { slug: "to-jpg", path: "web", category: "Web Tools", icon: FileImage },
-  { slug: "lorem-ipsum-generator", path: "other", category: "Other Tools", icon: Type },
-  { slug: "zip", path: "other", category: "Other Tools", icon: Archive },
-  { slug: "unix-timestamp", path: "other", category: "Other Tools", icon: Timer },
-  { slug: "meme-maker", path: "other", category: "Other Tools", icon: Image },
+  { slug: "article-generator", path: "write", category: "AI Write", icon: PenLine },
+  { slug: "bill-sale-generator", path: "write", category: "AI Write", icon: FileText },
+  { slug: "business-name-generator", path: "write", category: "AI Write", icon: Briefcase },
+  { slug: "business-slogan-generator", path: "write", category: "AI Write", icon: Sparkles },
+  { slug: "content-brief-generator", path: "write", category: "AI Write", icon: Map },
+  { slug: "content-improver", path: "write", category: "AI Write", icon: Wand2 },
+  { slug: "explain-like-five", path: "write", category: "AI Write", icon: HelpCircle },
+  { slug: "facebook-ad-headlines", path: "write", category: "AI Write", icon: Facebook },
+  { slug: "faq-generator", path: "write", category: "AI Write", icon: MessageSquare },
+  { slug: "instagram-story-ideas", path: "write", category: "AI Write", icon: Instagram },
+  { slug: "listicle-writer", path: "write", category: "AI Write", icon: List },
+  { slug: "meta-description-generator", path: "write", category: "AI Write", icon: Search },
+  { slug: "nda-generator", path: "write", category: "AI Write", icon: ShieldCheck },
+  { slug: "paragraph-completer", path: "write", category: "AI Write", icon: Baseline },
+  { slug: "paragraph-rewriter", path: "write", category: "AI Write", icon: RefreshCw },
+  { slug: "paragraph-writer", path: "write", category: "AI Write", icon: PenLine },
+  { slug: "podcast-writer", path: "write", category: "AI Write", icon: Mic },
+  { slug: "poll-generator", path: "write", category: "AI Write", icon: List },
+  { slug: "post-ideas", path: "write", category: "AI Write", icon: Sparkles },
+  { slug: "post-writer", path: "write", category: "AI Write", icon: PenLine },
+  { slug: "purchase-agreement-generator", path: "write", category: "AI Write", icon: FileText },
+  { slug: "real-estate-description", path: "write", category: "AI Write", icon: Map },
+  { slug: "sentence-rewriter", path: "write", category: "AI Write", icon: RefreshCw },
+  { slug: "shorten-content", path: "write", category: "AI Write", icon: Shrink },
+  { slug: "tiktok-script-writer", path: "write", category: "AI Write", icon: Video },
+  { slug: "title-rewriter", path: "write", category: "AI Write", icon: RefreshCw },
+  { slug: "tone-of-voice", path: "write", category: "AI Write", icon: AudioLines },
+  { slug: "trivia-generator", path: "write", category: "AI Write", icon: HelpCircle },
+  { slug: "word-counter", path: "write", category: "AI Write", icon: Hash },
 
-  // Remaining tools from sitemap to be at bottom
+  // Other/Converters
+  ...otherRanking.map(slug => ({ slug, path: slug.includes("pdf") ? "converter" : "other", category: "Other Tools" as const, icon: getIconForSlug(slug) })),
   { slug: "automation-wizard", path: "content-machine", category: "AI Write", icon: Zap },
   { slug: "bulk-generator", path: "content-machine", category: "AI Write", icon: Zap },
   { slug: "generate-article", path: "content-machine", category: "AI Write", icon: FileText },
@@ -206,6 +308,7 @@ const rawTools: { slug: string; path: string; category: ToolCategory; icon: Reac
   { slug: "xml", path: "converters", category: "Converter Tools", icon: FileCode },
   { slug: "detect", path: "web", category: "Web Tools", icon: ShieldCheck },
   { slug: "trace", path: "web", category: "Web Tools", icon: Globe },
+  { slug: "to-png", path: "web", category: "Web Tools", icon: FileImage },
 ];
 
 function getIconForSlug(slug: string): React.ElementType {
@@ -263,6 +366,8 @@ function getIconForSlug(slug: string): React.ElementType {
   if (slug.includes("zip")) return Archive;
   if (slug.includes("timestamp")) return Timer;
   if (slug.includes("meme")) return Image;
+  if (slug.includes("instagram")) return Instagram;
+  if (slug.includes("facebook")) return Facebook;
   return File;
 }
 
@@ -310,26 +415,41 @@ function StampIcon(props: any) {
   );
 }
 
-export const tools: Tool[] = rawTools.map((t) => {
-  let rank = 999;
-  if (t.category === "Pdf Tools") rank = pdfRanking.indexOf(t.slug);
-  else if (t.category === "Image Tools") rank = imageRanking.indexOf(t.slug);
-  else if (t.category === "Video Tools") rank = videoRanking.indexOf(t.slug);
-  else if (t.category === "AI Write") rank = writeRanking.indexOf(t.slug);
-  else if (t.category === "Other Tools" || t.category === "Converter Tools" || t.category === "Web Tools") {
-    const idx = otherRanking.indexOf(t.slug);
-    rank = idx === -1 ? 999 : idx;
-  }
-  
-  if (rank === -1) rank = 999;
+// Deduplicate and process all tools
+const seenSlugs = new Set<string>();
+export const tools: Tool[] = rawTools
+  .filter((t) => {
+    if (seenSlugs.has(`${t.category}-${t.slug}`)) return false;
+    seenSlugs.add(`${t.category}-${t.slug}`);
+    return true;
+  })
+  .map((t) => {
+    let rank = 999;
+    if (t.category === "Pdf Tools") {
+      const idx = pdfRanking.indexOf(t.slug);
+      rank = idx !== -1 ? idx : 999;
+    } else if (t.category === "Image Tools") {
+      const idx = imageRanking.indexOf(t.slug);
+      rank = idx !== -1 ? idx : 999;
+    } else if (t.category === "Video Tools") {
+      const idx = videoRanking.indexOf(t.slug);
+      rank = idx !== -1 ? idx : 999;
+    } else if (t.category === "AI Write") {
+      const idx = writeRanking.indexOf(t.slug);
+      rank = idx !== -1 ? idx : 999;
+    } else if (t.category === "Other Tools" || t.category === "Converter Tools" || t.category === "Web Tools") {
+      const idx = otherRanking.indexOf(t.slug);
+      rank = idx !== -1 ? idx : 999;
+    }
 
-  return {
-    title: formatTitle(t.slug),
-    slug: t.slug,
-    description: t.description || `Use this ${t.category.toLowerCase()} tool to ${formatTitle(t.slug).toLowerCase()}. Efficient and powerful AI processing.`,
-    href: `https://tinywow.com/${t.path}/${t.slug}`,
-    category: t.category,
-    icon: t.icon,
-    rank: rank,
-  };
-}).sort((a, b) => a.rank - b.rank);
+    return {
+      title: formatTitle(t.slug),
+      slug: t.slug,
+      description: t.description || `Use this ${t.category.toLowerCase()} tool to ${formatTitle(t.slug).toLowerCase()}. Efficient and powerful AI processing.`,
+      href: `https://tinywow.com/${t.path}/${t.slug}`,
+      category: t.category,
+      icon: t.icon,
+      rank: rank,
+    };
+  })
+  .sort((a, b) => a.rank - b.rank);
