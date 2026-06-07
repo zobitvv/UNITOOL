@@ -86,6 +86,7 @@ export type Tool = {
   href: string;
   category: ToolCategory;
   icon: React.ElementType;
+  rank: number;
 };
 
 function formatTitle(slug: string) {
@@ -101,315 +102,169 @@ function formatTitle(slug: string) {
     .join(' ');
 }
 
-const rawTools: { slug: string; path: string; category: ToolCategory; icon: React.ElementType; priority?: boolean; description?: string }[] = [
-  // --- PRIORITY TOOLS ---
-  { slug: "remove-bg", path: "image", category: "Image Tools", icon: Eraser, priority: true, description: "Remove the background from any image instantly using AI." },
-  { slug: "ai-image-generator", path: "image", category: "Image Tools", icon: Sparkles, priority: true, description: "Generate stunning high-quality images from simple text prompts." },
-  { slug: "cleanup-picture", path: "image", category: "Image Tools", icon: Eraser, priority: true, description: "Remove unwanted objects, people, or defects from your photos." },
-  { slug: "upscale", path: "image", category: "Image Tools", icon: Scaling, priority: true, description: "Increase image resolution and quality without losing detail." },
-  { slug: "merge", path: "pdf", category: "Pdf Tools", icon: Merge, priority: true, description: "Combine multiple PDF files into one single document." },
-  { slug: "edit", path: "pdf", category: "Pdf Tools", icon: FileEdit, priority: true, description: "Edit text, images, and pages directly within your PDF files." },
-  { slug: "compress", path: "pdf", category: "Pdf Tools", icon: Shrink, priority: true, description: "Reduce PDF file size while maintaining the best possible quality." },
-  { slug: "ai-rephraser", path: "write", category: "AI Write", icon: RefreshCw, priority: true, description: "Rewrite your sentences or paragraphs to improve flow and tone." },
-  { slug: "grammar-fixer", path: "write", category: "AI Write", icon: CheckCircle2, priority: true, description: "Instantly detect and fix grammar and spelling mistakes." },
-  { slug: "summarize-youtube", path: "write", category: "AI Write", icon: Youtube, priority: true, description: "Get a concise text summary of any YouTube video content." },
-  { slug: "compress", path: "video", category: "Video Tools", icon: Shrink, priority: true, description: "Reduce video file size without significant loss in quality." },
-  { slug: "cutter", path: "video", category: "Video Tools", icon: Scissors, priority: true, description: "Trim and cut video clips to the exact length you need." },
-
-  // --- IMAGE TOOLS ---
-  { slug: "add-images", path: "image", category: "Image Tools", icon: Image, description: "Overlay images on top of each other or add them to your canvas." },
-  { slug: "ai-art-generator", path: "image", category: "Image Tools", icon: Palette, description: "Transform your ideas into artistic masterpieces using AI." },
-  { slug: "blur-background", path: "image", category: "Image Tools", icon: Eye, description: "Apply a professional blur effect to the background of your photos." },
-  { slug: "border", path: "image", category: "Image Tools", icon: Layout, description: "Add stylish borders and frames to your images." },
-  { slug: "change-bg-photo", path: "image", category: "Image Tools", icon: Image, description: "Replace the background of your photo with a new image or color." },
-  { slug: "chart-maker", path: "image", category: "Image Tools", icon: PieChart, description: "Create professional charts and graphs for your data." },
-  { slug: "collage-maker", path: "image", category: "Image Tools", icon: Layout, description: "Combine multiple photos into a beautiful grid or custom collage." },
-  { slug: "colorize-photo", path: "image", category: "Image Tools", icon: Palette, description: "Bring old black and white photos to life with AI colorization." },
-  { slug: "combine-maker", path: "image", category: "Image Tools", icon: Merge, description: "Join multiple images together horizontally or vertically." },
-  { slug: "compress", path: "image", category: "Image Tools", icon: Shrink, description: "Optimize image file size for web use without losing quality." },
-  { slug: "crop", path: "image", category: "Image Tools", icon: Scissors, description: "Crop your images to specific aspect ratios or custom sizes." },
-  { slug: "crop-circle", path: "image", category: "Image Tools", icon: Scissors, description: "Easily crop your photos into a perfect circle shape." },
-  { slug: "eps-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert EPS vector files to standard JPG images." },
-  { slug: "eps-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Convert EPS vector files to transparent PNG images." },
-  { slug: "eps-to-svg", path: "image", category: "Image Tools", icon: FileCode, description: "Convert EPS vector files to web-friendly SVG format." },
-  { slug: "flip", path: "image", category: "Image Tools", icon: FlipHorizontal, description: "Flip your images horizontally or vertically." },
-  { slug: "font-to-png", path: "image", category: "Image Tools", icon: Type, description: "Convert text using any font into a high-quality PNG image." },
-  { slug: "gif-to-apng", path: "image", category: "Image Tools", icon: FileImage, description: "Convert GIF animations to the more modern APNG format." },
-  { slug: "gif-to-avif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert GIF files to the high-efficiency AVIF format." },
-  { slug: "gif-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Extract frames from a GIF or convert the first frame to JPG." },
-  { slug: "gif-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Extract high-quality frames from GIF animations as PNGs." },
-  { slug: "grayscale", path: "image", category: "Image Tools", icon: Palette, description: "Convert any color image to black and white grayscale." },
-  { slug: "heic-to-avif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert Apple HEIC photos to the modern AVIF format." },
-  { slug: "heic-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert HEIC images from iPhone to standard JPG format." },
-  { slug: "heic-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Convert HEIC images to PNG with transparency support." },
-  { slug: "jpg-to-avif", path: "image", category: "Image Tools", icon: FileImage, description: "Compress JPG images into the ultra-efficient AVIF format." },
-  { slug: "jpg-to-gif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert static JPG images into simple GIF format." },
-  { slug: "jpg-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Change JPG images to PNG format quickly." },
-  { slug: "jpg-to-svg", path: "image", category: "Image Tools", icon: FileCode, description: "Trace JPG images into scalable SVG vector graphics." },
-  { slug: "jpg-to-tiff", path: "image", category: "Image Tools", icon: FileImage, description: "Convert JPG images to high-quality TIFF format for printing." },
-  { slug: "jpg-to-webp", path: "image", category: "Image Tools", icon: FileImage, description: "Optimize JPGs for the web by converting to WebP format." },
-  { slug: "make-background-transparent", path: "image", category: "Image Tools", icon: Eraser, description: "Remove the background and save your image as a transparent PNG." },
-  { slug: "metadata", path: "image", category: "Image Tools", icon: FileSearch, description: "View or strip EXIF metadata and hidden info from your images." },
-  { slug: "pixelate", path: "image", category: "Image Tools", icon: Palette, description: "Add a pixelated or mosaic effect to your images." },
-  { slug: "png-to-avif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert PNG images to the superior AVIF compression format." },
-  { slug: "png-to-eps", path: "image", category: "Image Tools", icon: FileImage, description: "Convert PNG images into EPS vector files." },
-  { slug: "png-to-gif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert PNG images to GIF format." },
-  { slug: "png-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert transparent PNGs to standard JPG images." },
-  { slug: "png-to-svg", path: "image", category: "Image Tools", icon: FileCode, description: "Convert PNG graphics into scalable SVG vectors." },
-  { slug: "png-to-tiff", path: "image", category: "Image Tools", icon: FileImage, description: "Convert PNG files to TIFF format." },
-  { slug: "png-to-webp", path: "image", category: "Image Tools", icon: FileImage, description: "Convert PNG to WebP for faster web performance." },
-  { slug: "profile-photo", path: "image", category: "Image Tools", icon: User, description: "Create perfect square profile pictures for social media." },
-  { slug: "psd-to-ai", path: "image", category: "Image Tools", icon: FileImage, description: "Convert Photoshop PSD files to Illustrator AI format." },
-  { slug: "psd-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert complex PSD layers into a flat JPG image." },
-  { slug: "psd-to-pdf", path: "image", category: "Image Tools", icon: FileText, description: "Export Photoshop designs directly to PDF format." },
-  { slug: "psd-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Convert PSD files to PNG with transparency." },
-  { slug: "psd-to-svg", path: "image", category: "Image Tools", icon: FileCode, description: "Convert PSD files to scalable SVG format." },
-  { slug: "remove-objects", path: "image", category: "Image Tools", icon: Eraser, description: "Erase unwanted objects from your photos seamlessly." },
-  { slug: "remove-person", path: "image", category: "Image Tools", icon: Eraser, description: "Remove people from backgrounds using advanced AI." },
-  { slug: "remove-text-photo", path: "image", category: "Image Tools", icon: Eraser, description: "Cleanly remove text or captions from any image." },
-  { slug: "remove-watermark-photo", path: "image", category: "Image Tools", icon: Eraser, description: "Remove distracting watermarks from your images." },
-  { slug: "repair-defects", path: "image", category: "Image Tools", icon: Wand2, description: "Fix scratches and defects in old or damaged photos." },
-  { slug: "resize", path: "image", category: "Image Tools", icon: Scaling, description: "Change image dimensions to any custom size or ratio." },
-  { slug: "sharpen", path: "image", category: "Image Tools", icon: Wand2, description: "Fix blurry photos by increasing clarity and sharpness." },
-  { slug: "split", path: "image", category: "Image Tools", icon: Scissors, description: "Split large images into smaller tiles or pieces." },
-  { slug: "svg-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Convert SVG vectors to high-resolution PNG images." },
-  { slug: "text-image-generator", path: "image", category: "Image Tools", icon: Type, description: "Overlay stylish text onto your images using AI." },
-  { slug: "text-to-image", path: "image", category: "Image Tools", icon: Sparkles, description: "Turn your imagination into reality with AI image generation." },
-  { slug: "tiff-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert large TIFF files into compressed JPG images." },
-  { slug: "tiff-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Convert TIFF files to PNG format." },
-  { slug: "tiff-to-svg", path: "image", category: "Image Tools", icon: FileCode, description: "Convert TIFF images to scalable SVG vectors." },
-  { slug: "tiff-to-text", path: "image", category: "Image Tools", icon: Type, description: "Extract text from TIFF documents using OCR." },
-  { slug: "to-text", path: "image", category: "Image Tools", icon: Type, description: "Extract text from any image file (OCR)." },
-  { slug: "translate", path: "image", category: "Image Tools", icon: Languages, description: "Translate text directly within your images using AI." },
-  { slug: "unblur", path: "image", category: "Image Tools", icon: Eye, description: "Clear up out-of-focus or motion-blurred photos." },
-  { slug: "vsd-to-docx", path: "image", category: "Image Tools", icon: FileText, description: "Convert Visio VSD files to Microsoft Word format." },
-  { slug: "vsd-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert Visio VSD diagrams to JPG images." },
-  { slug: "vsd-to-pdf", path: "image", category: "Image Tools", icon: FileText, description: "Export Visio VSD diagrams to PDF format." },
-  { slug: "vsd-to-pptx", path: "image", category: "Image Tools", icon: FileVideo, description: "Convert Visio VSD files to PowerPoint slides." },
-  { slug: "vsdx-to-docx", path: "image", category: "Image Tools", icon: FileText, description: "Convert Visio VSDX files to Word format." },
-  { slug: "vsdx-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert Visio VSDX diagrams to JPG images." },
-  { slug: "vsdx-to-pdf", path: "image", category: "Image Tools", icon: FileText, description: "Export Visio VSDX diagrams to PDF format." },
-  { slug: "vsdx-to-pptx", path: "image", category: "Image Tools", icon: FileVideo, description: "Convert Visio VSDX files to PowerPoint slides." },
-  { slug: "webp-to-avif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert WebP images to the even more efficient AVIF format." },
-  { slug: "webp-to-gif", path: "image", category: "Image Tools", icon: FileImage, description: "Convert WebP files to GIF format." },
-  { slug: "webp-to-jpg", path: "image", category: "Image Tools", icon: FileImage, description: "Convert WebP images to standard JPG format." },
-  { slug: "webp-to-png", path: "image", category: "Image Tools", icon: FileImage, description: "Convert WebP images to PNG format." },
-
-  // --- AI WRITE ---
-  { slug: "ai-detector", path: "write", category: "AI Write", icon: ShieldCheck, description: "Check if text was written by a human or generated by an AI model." },
-  { slug: "ai-twitter-generator", path: "write", category: "AI Write", icon: Twitter, description: "Generate engaging and viral-ready tweets for your profile." },
-  { slug: "article-generator", path: "write", category: "AI Write", icon: PenLine, description: "Generate full-length, high-quality articles on any topic." },
-  { slug: "article-rewriter", path: "write", category: "AI Write", icon: RotateCw, description: "Paraphrase articles to make them unique while keeping the same meaning." },
-  { slug: "article-writer", path: "write", category: "AI Write", icon: PenLine, description: "Write blog posts and articles quickly with AI assistance." },
-  { slug: "bill-sale-generator", path: "write", category: "AI Write", icon: FileText, description: "Create professional bill of sale documents for your transactions." },
-  { slug: "blog-outline", path: "write", category: "AI Write", icon: List, description: "Generate structured outlines for your next blog post." },
-  { slug: "business-name-generator", path: "write", category: "AI Write", icon: Briefcase, description: "Get creative name ideas for your startup or business." },
-  { slug: "business-plan-generator", path: "write", category: "AI Write", icon: Briefcase, description: "Generate a comprehensive business plan for your project." },
-  { slug: "business-slogan-generator", path: "write", category: "AI Write", icon: Briefcase, description: "Create catchy and memorable slogans for your brand." },
-  { slug: "cold-email-writer", path: "write", category: "AI Write", icon: Mail, description: "Write personalized and high-converting cold outreach emails." },
-  { slug: "content-brief-generator", path: "write", category: "AI Write", icon: List, description: "Create detailed content briefs for writers and creators." },
-  { slug: "content-improver", path: "write", category: "AI Write", icon: Wand2, description: "Polish and enhance your existing text for better clarity and impact." },
-  { slug: "content-planner", path: "write", category: "AI Write", icon: Map, description: "Plan your content strategy and calendar with AI suggestions." },
-  { slug: "content-summarizer", path: "write", category: "AI Write", icon: BookOpen, description: "Condense long text into concise summaries." },
-  { slug: "essay-writer", path: "write", category: "AI Write", icon: PenLine, description: "Write well-structured and researched essays on any subject." },
-  { slug: "explain-like-five", path: "write", category: "AI Write", icon: HelpCircle, description: "Simplify complex topics as if explaining them to a 5-year-old." },
-  { slug: "facebook-ad-headlines", path: "write", category: "AI Write", icon: Facebook, description: "Generate high-converting headlines for Facebook advertisements." },
-  { slug: "faq-generator", path: "write", category: "AI Write", icon: HelpCircle, description: "Create a list of frequently asked questions for your product." },
-  { slug: "humanizer-ai", path: "write", category: "AI Write", icon: UserCog, description: "Make AI-generated text sound more natural and human-like." },
-  { slug: "instagram-caption-generator", path: "write", category: "AI Write", icon: Instagram, description: "Write engaging captions for your Instagram posts." },
-  { slug: "instagram-story-ideas", path: "write", category: "AI Write", icon: Instagram, description: "Get fresh and creative ideas for your Instagram stories." },
-  { slug: "landing-page-copy", path: "write", category: "AI Write", icon: Layout, description: "Write persuasive copy for your landing pages that converts." },
-  { slug: "linkedin-post-generator", path: "write", category: "AI Write", icon: Linkedin, description: "Create professional posts for your LinkedIn network." },
-  { slug: "listicle-writer", path: "write", category: "AI Write", icon: List, description: "Write entertaining and informative list-style articles." },
-  { slug: "meta-description-generator", path: "write", category: "AI Write", icon: Search, description: "Generate SEO-friendly meta descriptions for your web pages." },
-  { slug: "nda-generator", path: "write", category: "AI Write", icon: FileText, description: "Create professional non-disclosure agreements quickly." },
-  { slug: "paragraph-completer", path: "write", category: "AI Write", icon: PenLine, description: "Let AI finish your paragraphs based on your initial text." },
-  { slug: "paragraph-rewriter", path: "write", category: "AI Write", icon: RotateCw, description: "Rewrite any paragraph to improve clarity or change the tone." },
-  { slug: "paragraph-writer", path: "write", category: "AI Write", icon: PenLine, description: "Generate coherent and well-written paragraphs from a topic." },
-  { slug: "paraphrasing", path: "write", category: "AI Write", icon: RefreshCw, description: "Rephrase text to avoid plagiarism or improve flow." },
-  { slug: "podcast-writer", path: "write", category: "AI Write", icon: Mic, description: "Write engaging scripts and show notes for your podcasts." },
-  { slug: "poll-generator", path: "write", category: "AI Write", icon: List, description: "Create interesting poll questions for your audience." },
-  { slug: "post-generator", path: "write", category: "AI Write", icon: MessageSquare, description: "Generate versatile posts for various social media platforms." },
-  { slug: "post-ideas", path: "write", category: "AI Write", icon: Sparkles, description: "Get a stream of creative ideas for your social media content." },
-  { slug: "post-rewriter", path: "write", category: "AI Write", icon: RotateCw, description: "Refresh and rewrite your social media posts for better engagement." },
-  { slug: "post-writer", path: "write", category: "AI Write", icon: PenLine, description: "Write compelling social media posts with AI assistance." },
-  { slug: "purchase-agreement-generator", path: "write", category: "AI Write", icon: FileText, description: "Generate professional purchase agreement documents." },
-  { slug: "real-estate-description", path: "write", category: "AI Write", icon: Map, description: "Write alluring descriptions for real estate listings." },
-  { slug: "sentence-rewriter", path: "write", category: "AI Write", icon: RotateCw, description: "Rewrite single sentences for better impact or clarity." },
-  { slug: "shorten-content", path: "write", category: "AI Write", icon: Shrink, description: "Make your text more concise by removing fluff." },
-  { slug: "story-generator", path: "write", category: "AI Write", icon: Book, description: "Generate creative stories and narratives using AI." },
-  { slug: "tiktok-script-writer", path: "write", category: "AI Write", icon: Video, description: "Write viral-ready scripts for your TikTok videos." },
-  { slug: "title-rewriter", path: "write", category: "AI Write", icon: RotateCw, description: "Create better titles for your articles or videos." },
-  { slug: "tone-of-voice", path: "write", category: "AI Write", icon: Mic, description: "Analyze or adjust the tone of your writing to fit your brand." },
-  { slug: "translate", path: "write", category: "AI Write", icon: Languages, description: "Translate your text into dozens of different languages." },
-  { slug: "trivia-generator", path: "write", category: "AI Write", icon: HelpCircle, description: "Generate fun and challenging trivia questions on any topic." },
-  { slug: "word-counter", path: "write", category: "AI Write", icon: Hash, description: "Count words, characters, and sentences in your text." },
-  { slug: "youtube-script-writer", path: "write", category: "AI Write", icon: Youtube, description: "Write high-engagement scripts for your YouTube videos." },
-  { slug: "automation-wizard", path: "content-machine", category: "AI Write", icon: Zap, description: "Automate your content creation workflow with this tool." },
-  { slug: "bulk-generator", path: "content-machine", category: "AI Write", icon: Zap, description: "Generate multiple pieces of content in one go." },
-  { slug: "generate-article", path: "content-machine", category: "AI Write", icon: FileText, description: "Powerful AI tool for generating complete articles." },
-  { slug: "programmatic", path: "content-machine", category: "AI Write", icon: Code2, description: "Generate content programmatically for large scale projects." },
-
-  // --- PDF TOOLS ---
-  { slug: "add-images", path: "pdf", category: "Pdf Tools", icon: Image, description: "Insert images directly into your PDF documents." },
-  { slug: "add-pages", path: "pdf", category: "Pdf Tools", icon: FileUp, description: "Add new blank pages or existing files to your PDF." },
-  { slug: "add-text", path: "pdf", category: "Pdf Tools", icon: Type, description: "Type text anywhere on your PDF document." },
-  { slug: "annotate", path: "pdf", category: "Pdf Tools", icon: PenLine, description: "Highlight, underline, or add comments to your PDF files." },
-  { slug: "create", path: "pdf", category: "Pdf Tools", icon: FilePlusIcon, description: "Create a new PDF from scratch or from images/text." },
-  { slug: "crop", path: "pdf", category: "Pdf Tools", icon: Scissors, description: "Crop PDF pages to adjust the visible area." },
-  { slug: "delete", path: "pdf", category: "Pdf Tools", icon: Eraser, description: "Remove unwanted pages from your PDF document." },
-  { slug: "extract-img", path: "pdf", category: "Pdf Tools", icon: Image, description: "Extract all images embedded within a PDF file." },
-  { slug: "extract-text", path: "pdf", category: "Pdf Tools", icon: FileText, description: "Extract all selectable text from your PDF document." },
-  { slug: "from-azw3", path: "pdf", category: "Pdf Tools", icon: Book, description: "Convert Kindle AZW3 files to PDF format." },
-  { slug: "from-eps", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert EPS vector files to PDF documents." },
-  { slug: "from-epub", path: "pdf", category: "Pdf Tools", icon: Book, description: "Convert EPUB ebooks into PDF format." },
-  { slug: "from-gif", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert GIF images into PDF format." },
-  { slug: "from-heic", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert iPhone HEIC photos into PDF files." },
-  { slug: "from-jpg", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert JPG photos to PDF documents." },
-  { slug: "from-mobi", path: "pdf", category: "Pdf Tools", icon: Book, description: "Convert MOBI ebook files into PDF format." },
-  { slug: "from-msg", path: "pdf", category: "Pdf Tools", icon: Mail, description: "Convert Outlook MSG email files to PDF format." },
-  { slug: "from-png", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert PNG images into PDF documents." },
-  { slug: "from-ppt", path: "pdf", category: "Pdf Tools", icon: FileVideo, description: "Convert PowerPoint presentations to PDF format." },
-  { slug: "from-tiff", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert TIFF images to PDF format." },
-  { slug: "from-url", path: "pdf", category: "Pdf Tools", icon: Globe, description: "Convert any live website URL into a PDF document." },
-  { slug: "from-webp", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert WebP images into PDF format." },
-  { slug: "from-word", path: "pdf", category: "Pdf Tools", icon: FileText, description: "Convert Microsoft Word documents to PDF format." },
-  { slug: "protect", path: "pdf", category: "Pdf Tools", icon: FileLock2, description: "Add a password and encrypt your PDF document." },
-  { slug: "rearrange", path: "pdf", category: "Pdf Tools", icon: List, description: "Drag and drop to reorder pages within your PDF." },
-  { slug: "remove-watermark", path: "pdf", category: "Pdf Tools", icon: Eraser, description: "Attempt to remove watermarks from PDF pages." },
-  { slug: "rotate", path: "pdf", category: "Pdf Tools", icon: RotateCw, description: "Rotate PDF pages individually or all at once." },
-  { slug: "sign", path: "pdf", category: "Pdf Tools", icon: Signature, description: "Add your digital signature or hand-drawn sign to a PDF." },
-  { slug: "split", path: "pdf", category: "Pdf Tools", icon: Scissors, description: "Split a PDF into multiple separate files." },
-  { slug: "summarizer", path: "pdf", category: "Pdf Tools", icon: BookOpen, description: "Use AI to get a concise summary of a long PDF document." },
-  { slug: "to-azw3", path: "pdf", category: "Pdf Tools", icon: Book, description: "Convert PDF documents to Kindle AZW3 format." },
-  { slug: "to-csv", path: "pdf", category: "Pdf Tools", icon: FileSpreadsheet, description: "Extract data from PDF tables into CSV format." },
-  { slug: "to-epub", path: "pdf", category: "Pdf Tools", icon: Book, description: "Convert PDF files into EPUB ebook format." },
-  { slug: "to-jpg", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert PDF pages into high-quality JPG images." },
-  { slug: "to-mobi", path: "pdf", category: "Pdf Tools", icon: Book, description: "Convert PDF documents to MOBI ebook format." },
-  { slug: "to-png", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert PDF pages into transparent PNG images." },
-  { slug: "to-ppt", path: "pdf", category: "Pdf Tools", icon: FileVideo, description: "Convert PDF documents to PowerPoint presentations." },
-  { slug: "to-text", path: "pdf", category: "Pdf Tools", icon: Type, description: "Convert PDF to editable plain text format." },
-  { slug: "to-tiff", path: "pdf", category: "Pdf Tools", icon: FileImage, description: "Convert PDF files into high-resolution TIFF format." },
-  { slug: "to-word", path: "pdf", category: "Pdf Tools", icon: FileText, description: "Convert PDF documents into editable Word files." },
-  { slug: "to-xlsx", path: "pdf", category: "Pdf Tools", icon: FileSpreadsheet, description: "Extract tables from PDF into Excel format." },
-  { slug: "translate", path: "pdf", category: "Pdf Tools", icon: Languages, description: "Translate entire PDF documents into different languages." },
-  { slug: "unlock", path: "pdf", category: "Pdf Tools", icon: FileKey2, description: "Remove passwords and security from protected PDFs." },
-  { slug: "watermark", path: "pdf", category: "Pdf Tools", icon: StampIcon, description: "Add text or image watermarks to your PDF pages." },
-
-  // --- VIDEO TOOLS ---
-  { slug: "aac-to-flac", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert AAC audio files to high-quality FLAC format." },
-  { slug: "aac-to-m4r", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert AAC audio into M4R iPhone ringtone format." },
-  { slug: "aac-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert AAC files to common MP3 audio format." },
-  { slug: "aac-to-mp4", path: "video", category: "Video Tools", icon: FileVideo, description: "Wrap AAC audio into an MP4 video container." },
-  { slug: "aac-to-wav", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert AAC audio to uncompressed WAV format." },
-  { slug: "add-subtitles", path: "video", category: "Video Tools", icon: Subtitles, description: "Burn subtitles or captions directly into your video file." },
-  { slug: "audio-to-text", path: "video", category: "Video Tools", icon: Type, description: "Transcribe spoken audio from your video into text." },
-  { slug: "avi-to-gif", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert AVI video clips into animated GIF files." },
-  { slug: "avi-to-mkv", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert AVI videos to modern MKV container format." },
-  { slug: "avi-to-mov", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert AVI videos to Apple QuickTime MOV format." },
-  { slug: "avi-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Extract the audio track from an AVI video as MP3." },
-  { slug: "avi-to-mp4", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert AVI videos to the standard MP4 format." },
-  { slug: "compress-avi", path: "video", category: "Video Tools", icon: Shrink, description: "Reduce the size of large AVI video files." },
-  { slug: "compress-mkv", path: "video", category: "Video Tools", icon: Shrink, description: "Reduce the file size of MKV video files." },
-  { slug: "compress-mov", path: "video", category: "Video Tools", icon: Shrink, description: "Optimize and compress Apple MOV video files." },
-  { slug: "extract-audio", path: "video", category: "Video Tools", icon: Music, description: "Strip the sound from your video and save it as an audio file." },
-  { slug: "gif-to-mov", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert animated GIFs into MOV video files." },
-  { slug: "gif-to-webm", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert GIFs into web-optimized WebM videos." },
-  { slug: "m4a-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert M4A audio files to standard MP3 format." },
-  { slug: "m4a-to-mp4", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert M4A audio to MP4 format." },
-  { slug: "m4a-to-wav", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert M4A audio to WAV format." },
-  { slug: "mkv-to-avi", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert MKV videos to AVI format." },
-  { slug: "mkv-to-gif", path: "video", category: "Video Tools", icon: FileVideo, description: "Create animated GIFs from MKV video clips." },
-  { slug: "mkv-to-mov", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert MKV files to Apple MOV format." },
-  { slug: "mkv-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Extract audio from MKV files as MP3." },
-  { slug: "mkv-to-mp4", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert MKV videos to MP4 format." },
-  { slug: "mov-to-avi", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert MOV videos to AVI format." },
-  { slug: "mov-to-gif", path: "video", category: "Video Tools", icon: FileVideo, description: "Create GIFs from Apple MOV video files." },
-  { slug: "mov-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Extract audio from MOV videos as MP3." },
-  { slug: "mov-to-mp4", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert Apple MOV videos to standard MP4 format." },
-  { slug: "mov-to-wav", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert MOV audio to WAV format." },
-  { slug: "mp4-to-avi", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert standard MP4 videos to AVI format." },
-  { slug: "mp4-to-gif", path: "video", category: "Video Tools", icon: FileVideo, description: "Turn MP4 video clips into animated GIF files." },
-  { slug: "mp4-to-mov", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert MP4 videos to Apple MOV format." },
-  { slug: "mp4-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Extract audio tracks from MP4 videos as MP3." },
-  { slug: "mp4-to-ogg", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert MP4 audio to OGG format." },
-  { slug: "mp4-to-wav", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert MP4 audio to WAV format." },
-  { slug: "mp4-to-webm", path: "video", category: "Video Tools", icon: FileVideo, description: "Optimize MP4 videos for the web by converting to WebM." },
-  { slug: "mute", path: "video", category: "Video Tools", icon: VolumeX, description: "Completely remove audio from your video file." },
-  { slug: "ogg-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert OGG audio files to MP3 format." },
-  { slug: "ogg-to-wav", path: "video", category: "Video Tools", icon: FileAudio, description: "Convert OGG audio to WAV format." },
-  { slug: "resize", path: "video", category: "Video Tools", icon: Scaling, description: "Change the resolution or aspect ratio of your video." },
-  { slug: "summarize-podcast", path: "video", category: "Video Tools", icon: Mic, description: "Get a text summary of long podcast episodes using AI." },
-  { slug: "to-gif", path: "video", category: "Video Tools", icon: Video, description: "Convert various video formats into animated GIF format." },
-  { slug: "to-text", path: "video", category: "Video Tools", icon: Type, description: "Extract spoken words from video and convert them to text." },
-  { slug: "to-webp", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert video clips to animated WebP format." },
-  { slug: "transcribe-podcast", path: "video", category: "Video Tools", icon: Mic, description: "Get a full word-for-word transcript of any podcast audio." },
-  { slug: "webm-to-mov", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert WebM videos to Apple MOV format." },
-  { slug: "webm-to-mp3", path: "video", category: "Video Tools", icon: FileAudio, description: "Extract audio from WebM videos as MP3 files." },
-  { slug: "webm-to-mp4", path: "video", category: "Video Tools", icon: FileVideo, description: "Convert WebM videos to the more common MP4 format." },
-  { slug: "youtube-to-text", path: "video", category: "Video Tools", icon: Type, description: "Transcribe any YouTube video content into editable text." },
-  { slug: "youtube-transcript", path: "video", category: "Video Tools", icon: FileText, description: "Download the full official transcript of a YouTube video." },
-
-  // --- CONVERTER TOOLS ---
-  { slug: "aac", path: "converters", category: "Converter Tools", icon: FileAudio, description: "Versatile AAC audio converter tool." },
-  { slug: "avi", path: "converters", category: "Converter Tools", icon: FileVideo, description: "Versatile AVI video converter tool." },
-  { slug: "azw3", path: "converters", category: "Converter Tools", icon: Book, description: "Versatile AZW3 ebook converter tool." },
-  { slug: "csv", path: "converters", category: "Converter Tools", icon: FileSpreadsheet, description: "Versatile CSV data converter tool." },
-  { slug: "eps", path: "converters", category: "Converter Tools", icon: FileImage, description: "Versatile EPS vector converter tool." },
-  { slug: "epub", path: "converters", category: "Converter Tools", icon: Book, description: "Versatile EPUB ebook converter tool." },
-  { slug: "gif", path: "converters", category: "Converter Tools", icon: FileImage, description: "Versatile GIF image converter tool." },
-  { slug: "heic", path: "converters", category: "Converter Tools", icon: FileImage, description: "Versatile HEIC photo converter tool." },
-  { slug: "jpg", path: "converters", category: "Converter Tools", icon: FileImage, description: "Versatile JPG image converter tool." },
-  { slug: "m4a", path: "converters", category: "Converter Tools", icon: FileAudio, description: "Versatile M4A audio converter tool." },
-  { slug: "mkv", path: "converters", category: "Converter Tools", icon: FileVideo, description: "Versatile MKV video converter tool." },
-  { slug: "mobi", path: "converters", category: "Converter Tools", icon: Book, description: "Versatile MOBI ebook converter tool." },
-  { slug: "mov", path: "converters", category: "Converter Tools", icon: FileVideo, description: "Versatile MOV video converter tool." },
-  { slug: "mp4", path: "converters", category: "Converter Tools", icon: FileVideo, description: "Versatile MP4 video converter tool." },
-  { slug: "ogg", path: "converters", category: "Converter Tools", icon: FileAudio, description: "Versatile OGG audio converter tool." },
-  { slug: "pdf", path: "converters", category: "Converter Tools", icon: FileText, description: "Versatile PDF document converter tool." },
-  { slug: "png", path: "converters", category: "Converter Tools", icon: FileImage, description: "Versatile PNG image converter tool." },
-  { slug: "psd", path: "converters", category: "Converter Tools", icon: FileImage, description: "Versatile PSD document converter tool." },
-  { slug: "svg", path: "converters", category: "Converter Tools", icon: FileCode, description: "Scalable Vector Graphics (SVG) converter." },
-  { slug: "tiff", path: "converters", category: "Converter Tools", icon: FileImage, description: "High-quality TIFF image converter tool." },
-  { slug: "url", path: "converters", category: "Converter Tools", icon: Globe, description: "Convert URLs and website links to different formats." },
-  { slug: "vsd", path: "converters", category: "Converter Tools", icon: FileText, description: "Visio VSD diagram converter tool." },
-  { slug: "vsdx", path: "converters", category: "Converter Tools", icon: FileText, description: "Visio VSDX diagram converter tool." },
-  { slug: "webm", path: "converters", category: "Converter Tools", icon: FileVideo, description: "Web-optimized WebM video converter tool." },
-  { slug: "webp", path: "converters", category: "Converter Tools", icon: FileImage, description: "Web-optimized WebP image converter tool." },
-  { slug: "xls", path: "converters", category: "Converter Tools", icon: FileSpreadsheet, description: "Microsoft Excel XLS converter tool." },
-  { slug: "xml", path: "converters", category: "Converter Tools", icon: FileCode, description: "XML data file converter tool." },
-  { slug: "azw3-to-epub", path: "converter", category: "Converter Tools", icon: Book, description: "Convert Amazon AZW3 ebooks to EPUB format." },
-  { slug: "azw3-to-mobi", path: "converter", category: "Converter Tools", icon: Book, description: "Convert Amazon AZW3 ebooks to MOBI format." },
-  { slug: "csv-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Import CSV data into Microsoft Excel format." },
-  { slug: "csv-to-json", path: "converter", category: "Converter Tools", icon: Code2, description: "Convert tabular CSV data into JSON format for developers." },
-  { slug: "csv-to-xml", path: "converter", category: "Converter Tools", icon: FileCode, description: "Convert CSV spreadsheets into XML data format." },
-  { slug: "epub-to-azw3", path: "converter", category: "Converter Tools", icon: Book, description: "Convert EPUB ebooks to Kindle AZW3 format." },
-  { slug: "epub-to-mobi", path: "converter", category: "Converter Tools", icon: Book, description: "Convert EPUB ebooks to MOBI format." },
-  { slug: "excel-to-csv", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Export Excel spreadsheets to universal CSV format." },
-  { slug: "excel-to-pdf", path: "converter", category: "Converter Tools", icon: FileText, description: "Convert Excel workbooks to PDF documents." },
-  { slug: "excel-to-xml", path: "converter", category: "Converter Tools", icon: FileCode, description: "Convert Excel data into XML structure." },
-  { slug: "json-to-xml", path: "converter", category: "Converter Tools", icon: FileCode, description: "Convert JSON data structures into XML format." },
-  { slug: "mobi-to-azw3", path: "converter", category: "Converter Tools", icon: Book, description: "Convert MOBI ebooks to Kindle AZW3 format." },
-  { slug: "mobi-to-epub", path: "converter", category: "Converter Tools", icon: Book, description: "Convert MOBI ebook files to EPUB format." },
-  { slug: "split-csv", path: "converter", category: "Converter Tools", icon: Scissors, description: "Break large CSV files into multiple smaller ones." },
-  { slug: "split-excel", path: "converter", category: "Converter Tools", icon: Scissors, description: "Split large Excel workbooks into separate sheets or files." },
-  { slug: "xml-to-csv", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Flatten XML data into CSV spreadsheet format." },
-  { slug: "xml-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet, description: "Import XML data into Microsoft Excel spreadsheets." },
-  { slug: "xml-to-json", path: "converter", category: "Converter Tools", icon: Code2, description: "Convert XML data into JSON format for web applications." },
-
-  // --- WEB TOOLS ---
-  { slug: "detect", path: "web", category: "Web Tools", icon: ShieldCheck, description: "Analyze web content and detect security or structure issues." },
-  { slug: "to-jpg", path: "web", category: "Web Tools", icon: FileImage, description: "Convert various web assets to JPG image format." },
-  { slug: "to-png", path: "web", category: "Web Tools", icon: FileImage, description: "Convert various web assets to PNG image format." },
-  { slug: "trace", path: "web", category: "Web Tools", icon: Globe, description: "Trace network routes or analyze web traffic patterns." },
-
-  // --- OTHER TOOLS ---
-  { slug: "lorem-ipsum-generator", path: "other", category: "Other Tools", icon: Type, description: "Generate placeholder 'Lorem Ipsum' text for your designs." },
-  { slug: "meme-maker", path: "other", category: "Other Tools", icon: Image, description: "Create custom memes with your own images and text captions." },
-  { slug: "qr-code", path: "other", category: "Other Tools", icon: QrCode, description: "Generate custom QR codes for any URL or text content." },
-  { slug: "unix-timestamp", path: "other", category: "Other Tools", icon: Timer, description: "Convert dates and times to Unix timestamps and vice-versa." },
-  { slug: "zip", path: "other", category: "Other Tools", icon: Archive, description: "Compress multiple files and folders into a single ZIP archive." },
+const pdfRanking = [
+  "merge", "compress", "to-word", "to-jpg", "split", "from-word", "remove-watermark", "edit", "extract-text", "to-png",
+  "watermark", "rearrange", "from-jpg", "to-text", "sign", "unlock", "add-text", "add-images", "rotate", "extract-img",
+  "create", "delete", "crop", "annotate", "protect", "from-png", "summarizer", "to-xlsx", "to-epub", "add-pages",
+  "from-url", "to-mobi", "to-csv", "from-epub", "from-mobi", "from-heic", "from-gif", "from-azw3", "from-tiff"
 ];
+
+const imageRanking = [
+  "remove-bg", "compress", "resize", "jpg-to-png", "png-to-jpg", "make-background-transparent", "ai-image-generator",
+  "upscale", "remove-objects", "remove-watermark-photo", "ai-art-generator", "cleanup-picture", "unblur", "blur-background",
+  "crop", "repair-defects", "collage-maker", "remove-text-photo", "profile-photo", "colorize-photo", "grayscale",
+  "sharpen", "pixelate", "flip", "translate", "to-text", "border", "change-bg-photo", "text-to-image", "metadata",
+  "split", "font-to-png", "chart-maker", "heic-to-jpg", "webp-to-jpg", "psd-to-png", "gif-to-jpg", "png-to-webp",
+  "jpg-to-webp", "remove-person", "png-to-svg", "jpg-to-gif", "tiff-to-jpg", "svg-to-png", "png-to-gif", "heic-to-png",
+  "webp-to-png", "eps-to-jpg", "psd-to-jpg", "tiff-to-png", "png-to-avif", "jpg-to-avif"
+];
+
+const videoRanking = [
+  "compress", "mp4-to-mp3", "cutter", "extract-audio", "mp4-to-gif", "resize", "to-gif", "mute", "add-subtitles",
+  "mp4-to-mov", "transcribe-podcast", "summarize-podcast", "from-tiktok", "mp4-to-webm", "audio-to-text",
+  "gif-to-mp4", "mkv-to-mp4", "from-twitter", "youtube-to-text", "mp4-to-ogg"
+];
+
+const writeRanking = [
+  "paraphrasing", "article-writer", "ai-rephraser", "grammar-fixer", "summarize-youtube", "content-summarizer",
+  "article-rewriter", "humanizer-ai", "essay-writer", "blog-outline", "post-generator", "content-planner",
+  "instagram-caption-generator", "translate", "linkedin-post-generator", "ai-twitter-generator", "post-rewriter",
+  "youtube-script-writer", "cold-email-writer", "landing-page-copy", "ai-detector", "press-release-generator",
+  "privacy-policy-generator", "business-plan-generator", "story-generator"
+];
+
+const otherRanking = [
+  "excel-to-pdf", "qr-code", "csv-to-excel", "to-jpg", "lorem-ipsum-generator", "zip", "unix-timestamp", "meme-maker"
+];
+
+const rawTools: { slug: string; path: string; category: ToolCategory; icon: React.ElementType; description?: string }[] = [
+  // PDF
+  ...pdfRanking.map(slug => ({ slug, path: "pdf", category: "Pdf Tools" as const, icon: getIconForSlug(slug) })),
+  // Image
+  ...imageRanking.map(slug => ({ slug, path: "image", category: "Image Tools" as const, icon: getIconForSlug(slug) })),
+  // Video
+  ...videoRanking.map(slug => ({ slug, path: "video", category: "Video Tools" as const, icon: getIconForSlug(slug) })),
+  // Write
+  ...writeRanking.map(slug => ({ slug, path: "write", category: "AI Write" as const, icon: getIconForSlug(slug) })),
+  // Other / Misc from ranking
+  { slug: "excel-to-pdf", path: "converter", category: "Converter Tools", icon: FileText },
+  { slug: "qr-code", path: "other", category: "Other Tools", icon: QrCode },
+  { slug: "csv-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet },
+  { slug: "to-jpg", path: "web", category: "Web Tools", icon: FileImage },
+  { slug: "lorem-ipsum-generator", path: "other", category: "Other Tools", icon: Type },
+  { slug: "zip", path: "other", category: "Other Tools", icon: Archive },
+  { slug: "unix-timestamp", path: "other", category: "Other Tools", icon: Timer },
+  { slug: "meme-maker", path: "other", category: "Other Tools", icon: Image },
+
+  // Remaining tools from sitemap to be at bottom
+  { slug: "automation-wizard", path: "content-machine", category: "AI Write", icon: Zap },
+  { slug: "bulk-generator", path: "content-machine", category: "AI Write", icon: Zap },
+  { slug: "generate-article", path: "content-machine", category: "AI Write", icon: FileText },
+  { slug: "programmatic", path: "content-machine", category: "AI Write", icon: Code2 },
+  { slug: "azw3-to-epub", path: "converter", category: "Converter Tools", icon: Book },
+  { slug: "azw3-to-mobi", path: "converter", category: "Converter Tools", icon: Book },
+  { slug: "csv-to-json", path: "converter", category: "Converter Tools", icon: Code2 },
+  { slug: "csv-to-xml", path: "converter", category: "Converter Tools", icon: FileCode },
+  { slug: "epub-to-azw3", path: "converter", category: "Converter Tools", icon: Book },
+  { slug: "epub-to-mobi", path: "converter", category: "Converter Tools", icon: Book },
+  { slug: "excel-to-csv", path: "converter", category: "Converter Tools", icon: FileSpreadsheet },
+  { slug: "excel-to-xml", path: "converter", category: "Converter Tools", icon: FileCode },
+  { slug: "json-to-xml", path: "converter", category: "Converter Tools", icon: FileCode },
+  { slug: "mobi-to-azw3", path: "converter", category: "Converter Tools", icon: Book },
+  { slug: "mobi-to-epub", path: "converter", category: "Converter Tools", icon: Book },
+  { slug: "split-csv", path: "converter", category: "Converter Tools", icon: Scissors },
+  { slug: "split-excel", path: "converter", category: "Converter Tools", icon: Scissors },
+  { slug: "xml-to-csv", path: "converter", category: "Converter Tools", icon: FileSpreadsheet },
+  { slug: "xml-to-excel", path: "converter", category: "Converter Tools", icon: FileSpreadsheet },
+  { slug: "xml-to-json", path: "converter", category: "Converter Tools", icon: Code2 },
+  { slug: "aac", path: "converters", category: "Converter Tools", icon: FileAudio },
+  { slug: "avi", path: "converters", category: "Converter Tools", icon: FileVideo },
+  { slug: "azw3", path: "converters", category: "Converter Tools", icon: Book },
+  { slug: "csv", path: "converters", category: "Converter Tools", icon: FileSpreadsheet },
+  { slug: "eps", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "epub", path: "converters", category: "Converter Tools", icon: Book },
+  { slug: "gif", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "heic", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "jpg", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "m4a", path: "converters", category: "Converter Tools", icon: FileAudio },
+  { slug: "mkv", path: "converters", category: "Converter Tools", icon: FileVideo },
+  { slug: "mobi", path: "converters", category: "Converter Tools", icon: Book },
+  { slug: "mov", path: "converters", category: "Converter Tools", icon: FileVideo },
+  { slug: "mp4", path: "converters", category: "Converter Tools", icon: FileVideo },
+  { slug: "ogg", path: "converters", category: "Converter Tools", icon: FileAudio },
+  { slug: "pdf", path: "converters", category: "Converter Tools", icon: FileText },
+  { slug: "png", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "psd", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "svg", path: "converters", category: "Converter Tools", icon: FileCode },
+  { slug: "tiff", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "url", path: "converters", category: "Converter Tools", icon: Globe },
+  { slug: "vsd", path: "converters", category: "Converter Tools", icon: FileText },
+  { slug: "vsdx", path: "converters", category: "Converter Tools", icon: FileText },
+  { slug: "webm", path: "converters", category: "Converter Tools", icon: FileVideo },
+  { slug: "webp", path: "converters", category: "Converter Tools", icon: FileImage },
+  { slug: "xls", path: "converters", category: "Converter Tools", icon: FileSpreadsheet },
+  { slug: "xml", path: "converters", category: "Converter Tools", icon: FileCode },
+  { slug: "detect", path: "web", category: "Web Tools", icon: ShieldCheck },
+  { slug: "trace", path: "web", category: "Web Tools", icon: Globe },
+];
+
+function getIconForSlug(slug: string): React.ElementType {
+  if (slug.includes("merge")) return Merge;
+  if (slug.includes("compress")) return Shrink;
+  if (slug.includes("word")) return FileText;
+  if (slug.includes("jpg") || slug.includes("png") || slug.includes("image") || slug.includes("photo")) return FileImage;
+  if (slug.includes("split")) return Scissors;
+  if (slug.includes("remove-watermark")) return Eraser;
+  if (slug.includes("edit")) return FileEdit;
+  if (slug.includes("extract-text")) return FileText;
+  if (slug.includes("watermark")) return StampIcon as any;
+  if (slug.includes("rearrange")) return List;
+  if (slug.includes("sign")) return Signature;
+  if (slug.includes("unlock")) return FileKey2;
+  if (slug.includes("add-text")) return Type;
+  if (slug.includes("rotate")) return RotateCw;
+  if (slug.includes("crop")) return Scissors;
+  if (slug.includes("annotate")) return PenLine;
+  if (slug.includes("protect")) return FileLock2;
+  if (slug.includes("summarize") || slug.includes("summarizer")) return BookOpen;
+  if (slug.includes("xlsx") || slug.includes("csv") || slug.includes("excel")) return FileSpreadsheet;
+  if (slug.includes("epub") || slug.includes("mobi") || slug.includes("azw3")) return Book;
+  if (slug.includes("url")) return Globe;
+  if (slug.includes("bg") || slug.includes("background")) return Eraser;
+  if (slug.includes("resize") || slug.includes("upscale")) return Scaling;
+  if (slug.includes("ai")) return Sparkles;
+  if (slug.includes("unblur") || slug.includes("sharpen")) return Wand2;
+  if (slug.includes("collage")) return Layout;
+  if (slug.includes("profile")) return User;
+  if (slug.includes("grayscale") || slug.includes("colorize") || slug.includes("pixelate")) return Palette;
+  if (slug.includes("flip")) return FlipHorizontal;
+  if (slug.includes("translate")) return Languages;
+  if (slug.includes("border")) return Layout;
+  if (slug.includes("metadata")) return FileSearch;
+  if (slug.includes("mp4") || slug.includes("video") || slug.includes("mov") || slug.includes("webm") || slug.includes("mkv") || slug.includes("avi")) return FileVideo;
+  if (slug.includes("mp3") || slug.includes("audio") || slug.includes("m4a") || slug.includes("wav") || slug.includes("ogg") || slug.includes("aac")) return FileAudio;
+  if (slug.includes("cutter")) return Scissors;
+  if (slug.includes("mute")) return VolumeX;
+  if (slug.includes("subtitle")) return Subtitles;
+  if (slug.includes("podcast")) return Mic;
+  if (slug.includes("tiktok")) return Video;
+  if (slug.includes("twitter")) return Twitter;
+  if (slug.includes("youtube")) return Youtube;
+  if (slug.includes("paraphrasing") || slug.includes("rephraser") || slug.includes("rewriter")) return RefreshCw;
+  if (slug.includes("writer") || slug.includes("generator") || slug.includes("copy")) return PenLine;
+  if (slug.includes("grammar")) return CheckCircle2;
+  if (slug.includes("humanizer")) return UserCog;
+  if (slug.includes("outline") || slug.includes("planner")) return Map;
+  if (slug.includes("caption")) return MessageSquare;
+  if (slug.includes("linkedin")) return Linkedin;
+  if (slug.includes("detector")) return ShieldCheck;
+  if (slug.includes("policy") || slug.includes("agreement")) return FileText;
+  if (slug.includes("qr")) return QrCode;
+  if (slug.includes("zip")) return Archive;
+  if (slug.includes("timestamp")) return Timer;
+  if (slug.includes("meme")) return Image;
+  return File;
+}
 
 function FilePlusIcon(props: any) {
   return React.createElement(
@@ -455,19 +310,26 @@ function StampIcon(props: any) {
   );
 }
 
-// Convert rawTools to the final Tool[] type
-// We sort so priority items come first, then the rest by slug
-export const tools: Tool[] = rawTools
-  .sort((a, b) => {
-    if (a.priority && !b.priority) return -1;
-    if (!a.priority && b.priority) return 1;
-    return a.slug.localeCompare(b.slug);
-  })
-  .map((t) => ({
+export const tools: Tool[] = rawTools.map((t) => {
+  let rank = 999;
+  if (t.category === "Pdf Tools") rank = pdfRanking.indexOf(t.slug);
+  else if (t.category === "Image Tools") rank = imageRanking.indexOf(t.slug);
+  else if (t.category === "Video Tools") rank = videoRanking.indexOf(t.slug);
+  else if (t.category === "AI Write") rank = writeRanking.indexOf(t.slug);
+  else if (t.category === "Other Tools" || t.category === "Converter Tools" || t.category === "Web Tools") {
+    const idx = otherRanking.indexOf(t.slug);
+    rank = idx === -1 ? 999 : idx;
+  }
+  
+  if (rank === -1) rank = 999;
+
+  return {
     title: formatTitle(t.slug),
     slug: t.slug,
-    description: t.description || "",
+    description: t.description || `Use this ${t.category.toLowerCase()} tool to ${formatTitle(t.slug).toLowerCase()}. Efficient and powerful AI processing.`,
     href: `https://tinywow.com/${t.path}/${t.slug}`,
     category: t.category,
     icon: t.icon,
-  }));
+    rank: rank,
+  };
+}).sort((a, b) => a.rank - b.rank);
